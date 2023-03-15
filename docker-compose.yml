@@ -3,6 +3,7 @@ services:
   ms-broker:
     container_name: ms-broker
     image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: root
