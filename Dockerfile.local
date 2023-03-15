@@ -1,0 +1,13 @@
+FROM heronlabs/node-alpine:1
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn install --frozen-lockfile \
+  && yarn cache clean \
+  && yarn compile
+
+EXPOSE 3000
+
+CMD ["yarn", "api:start"]
