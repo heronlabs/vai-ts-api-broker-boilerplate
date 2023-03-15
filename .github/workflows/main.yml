@@ -24,21 +24,12 @@ jobs:
         with:
           AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
 
-      - name: '[BUILD] | Compile'
-        run: yarn compile
-        shell: bash
-
-      - name: '[TEST] | Lint Check'
-        run: yarn lint:check
-        shell: bash
-
-      - name: '[TEST] | Unit Tests'
-        run: yarn test:unit --coverage
-        shell: bash
-
-      - name: '[UP] | Up Broker'
-        run: yarn docker:up:broker
-        shell: bash
+      - name: Start RabbitMQ
+        uses: namoshek/rabbitmq-github-action@v1
+        with:
+          version: '3.8.9'
+          ports: '5672:5672'
+          container-name: 'mqtt'
 
       - name: '[TEST] | Integration Tests'
         run: yarn test:integration --coverage
