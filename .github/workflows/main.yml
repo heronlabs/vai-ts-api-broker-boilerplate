@@ -16,13 +16,13 @@ jobs:
         with:
           repository: heronlabs/build-node-install-action
           ref: 1.3.0
-          token: ${{ inputs.AUTHOR_PERSONAL_ACCESS }}
+          token: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
           path: ./build-node-install-action
 
       - name: Run action
         uses: './build-node-install-action/application/github'
         with:
-          AUTHOR_PERSONAL_ACCESS: ${{ inputs.AUTHOR_PERSONAL_ACCESS }}
+          AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
 
       - name: '[BUILD] | Compile'
         run: yarn compile
