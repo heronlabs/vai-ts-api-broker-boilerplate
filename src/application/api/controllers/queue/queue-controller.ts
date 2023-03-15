@@ -1,3 +1,4 @@
+import {AmqpConnection, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {
   Body,
   Controller,
@@ -6,7 +7,6 @@ import {
   Inject,
   Post,
 } from '@nestjs/common';
-import {ClientProxy, MessagePattern} from '@nestjs/microservices';
 
 import {JsonPresenterDto} from '../../presenters/json/dtos/json-presenter-dto';
 import {JsonPresenter} from '../../presenters/json/json-presenter';
@@ -19,20 +19,22 @@ export class QueueController {
   public addRequest(
     @Body() webhook: WebhookBody
   ): JsonPresenterDto<WebhookBody> {
-    this.apiBrokerService
-      .send('add-request', JSON.stringify({data: webhook}))
-      .subscribe();
+    this.amqpConnection.publish<WebhookBody>('web-hook', 'api-broker', webhook);
 
     return this.jsonPresenter.envelope(webhook);
   }
 
-  @MessagePattern('add-request')
+  @RabbitSubscribe({
+    exchange: 'web-hook',
+    routingKey: 'api-broker',
+    queue: 'api-broker',
+  })
   listenRequest(data: WebhookBody): void {
     console.log(data);
   }
 
   constructor(
-    @Inject('apiBrokerService') private apiBrokerService: ClientProxy,
+    private readonly amqpConnection: AmqpConnection,
     @Inject(JsonPresenter) private readonly jsonPresenter: JsonPresenter
   ) {}
 }

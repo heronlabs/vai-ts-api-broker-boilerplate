@@ -1,6 +1,6 @@
+import {RabbitMQModule} from '@golevelup/nestjs-rabbitmq';
 import {Module, ModuleMetadata, ValidationPipe} from '@nestjs/common';
 import {APP_PIPE} from '@nestjs/core';
-import {ClientProxyFactory, Transport} from '@nestjs/microservices';
 
 import {CoreBootstrap} from '../../core/core-bootstrap';
 import {ConfigBootstrap} from '../configuration/config-bootstrap';
@@ -17,24 +17,25 @@ export const apiModule: ModuleMetadata = {
       useFactory: () => new ValidationPipe({transform: true}),
     },
     JsonPresenter,
-    {
-      provide: 'apiBrokerService',
-      inject: [Configuration],
-      useFactory: (environmentConfiguration: EnvironmentConfiguration) => {
-        return ClientProxyFactory.create({
-          transport: Transport.RMQ,
-          options: {
-            urls: [environmentConfiguration.rabbitMq.url],
-            queue: 'api-broker',
-            queueOptions: {
-              durable: false,
-            },
-          },
-        });
-      },
-    },
   ],
-  imports: [ConfigBootstrap, CoreBootstrap],
+  imports: [
+    ConfigBootstrap,
+    CoreBootstrap,
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigBootstrap],
+      inject: [Configuration],
+      useFactory: (environmentConfiguration: EnvironmentConfiguration) => ({
+        exchanges: [
+          {
+            name: 'web-hook',
+            type: 'topic',
+          },
+        ],
+        uri: environmentConfiguration.rabbitMq.url,
+        enableControllerDiscovery: true,
+      }),
+    }),
+  ],
   controllers: [HealthCheckController, QueueController],
 };
 

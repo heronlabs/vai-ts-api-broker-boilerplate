@@ -2,21 +2,21 @@ import {faker} from '@faker-js/faker';
 
 import {QueueController} from '../../../../../src/application/api/controllers/queue/queue-controller';
 import {
-  ClientProxyMock,
-  ClientProxyMoq,
-} from '../../../__mocks__/libs/client-proxy';
+  AmqpConnectionMock,
+  AmqpConnectionMoq,
+} from '../../../__mocks__/libs/amqp-connection-mock';
 import {JsonPresenterMock} from '../../../__mocks__/presenters/json-presenter-mock';
 
 describe('Given controller for queue', () => {
   let controller: QueueController;
 
   beforeEach(async () => {
-    controller = new QueueController(ClientProxyMoq, JsonPresenterMock);
+    controller = new QueueController(AmqpConnectionMoq, JsonPresenterMock);
   });
 
   describe('Given add request event', () => {
     it('Should emit new request', () => {
-      ClientProxyMock.emit.mockReturnValueOnce(undefined);
+      AmqpConnectionMock.publish.mockReturnValueOnce(undefined);
 
       JsonPresenterMock.envelope.mockImplementation(payload => ({payload}));
 
