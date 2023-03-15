@@ -14,25 +14,32 @@ jobs:
       - name: Checkout action repository
         uses: actions/checkout@v3
         with:
-          repository: heronlabs/build-broker-action
-          ref: 1.0.0
-          token: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
-          path: ./build-broker-action
+          repository: heronlabs/build-node-install-action
+          ref: 1.3.0
+          token: ${{ inputs.AUTHOR_PERSONAL_ACCESS }}
+          path: ./build-node-install-action
 
       - name: Run action
-        uses: './build-broker-action/application/github'
+        uses: './build-node-install-action/application/github'
         with:
-          AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
+          AUTHOR_PERSONAL_ACCESS: ${{ inputs.AUTHOR_PERSONAL_ACCESS }}
 
-      - name: Checkout action repository
-        uses: actions/checkout@v3
-        with:
-          repository: heronlabs/build-api-action
-          ref: 1.4.0
-          token: ${{ secrets.AUTHOR_PERSONAL_ACCESS}}
-          path: ./build-api-action
+      - name: '[BUILD] | Compile'
+        run: yarn compile
+        shell: bash
 
-      - name: Run action
-        uses: './build-api-action/application/github'
-        with:
-          AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
+      - name: '[TEST] | Lint Check'
+        run: yarn lint:check
+        shell: bash
+
+      - name: '[TEST] | Unit Tests'
+        run: yarn test:unit --coverage
+        shell: bash
+
+      - name: '[UP] | Up Broker'
+        run: yarn docker:up:broker
+        shell: bash
+
+      - name: '[TEST] | Integration Tests'
+        run: yarn test:integration --coverage
+        shell: bash

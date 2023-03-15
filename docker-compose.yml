@@ -3,12 +3,9 @@ services:
   ms-broker:
     container_name: ms-broker
     image: rabbitmq:3-management-alpine
-    hostname: localhost
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: root
-      RABBITMQ_DEFAULT_HOST: "localhost"
-      RABBITMQ_DEFAULT_VHOST: "localhost"
     ports:
       - 5672:5672
       - 15672:15672
