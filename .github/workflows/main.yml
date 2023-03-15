@@ -14,23 +14,25 @@ jobs:
       - name: Checkout action repository
         uses: actions/checkout@v3
         with:
-          repository: heronlabs/build-node-install-action
-          ref: 1.3.0
+          repository: heronlabs/build-broker-action
+          ref: 1.0.0
           token: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
-          path: ./build-node-install-action
+          path: ./build-broker-action
 
       - name: Run action
-        uses: './build-node-install-action/application/github'
+        uses: './build-broker-action/application/github'
         with:
           AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
 
-      - name: Start RabbitMQ
-        uses: namoshek/rabbitmq-github-action@v1
+      - name: Checkout action repository
+        uses: actions/checkout@v3
         with:
-          version: '3.8.9'
-          ports: '5672:5672'
-          container-name: 'mqtt'
+          repository: heronlabs/build-api-action
+          ref: 1.4.0
+          token: ${{ secrets.AUTHOR_PERSONAL_ACCESS}}
+          path: ./build-api-action
 
-      - name: '[TEST] | Integration Tests'
-        run: yarn test:integration --coverage
-        shell: bash
+      - name: Run action
+        uses: './build-api-action/application/github'
+        with:
+          AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
