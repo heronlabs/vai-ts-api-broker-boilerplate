@@ -8,17 +8,21 @@ jobs:
   pipeline:
     runs-on: ubuntu-latest
 
-    services:
-      rabbitmq:
-        image: rabbitmq:3.8
-        env:
-          RABBITMQ_DEFAULT_USER: root
-          RABBITMQ_DEFAULT_PASS: root
-        ports:
-          - 5672
-
     steps:
       - uses: actions/checkout@v3
+
+      - name: Checkout action repository
+        uses: actions/checkout@v3
+        with:
+          repository: heronlabs/build-broker-action
+          ref: 1.0.0
+          token: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
+          path: ./build-broker-action
+
+      - name: Run action
+        uses: './build-broker-action/application/github'
+        with:
+          AUTHOR_PERSONAL_ACCESS: ${{ secrets.AUTHOR_PERSONAL_ACCESS }}
 
       - name: Checkout action repository
         uses: actions/checkout@v3

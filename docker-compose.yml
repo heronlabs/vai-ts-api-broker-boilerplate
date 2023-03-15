@@ -6,6 +6,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: root
+      RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - 5672:5672
       - 15672:15672
