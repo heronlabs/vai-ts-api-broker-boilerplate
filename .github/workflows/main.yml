@@ -16,7 +16,7 @@ jobs:
           RABBITMQ_DEFAULT_PASS: 'root'
           RABBITMQ_DEFAULT_VHOST: '/'
         ports:
-          - 5672/tcp
+          - 5672:5672
 
     steps:
       - uses: actions/checkout@v3
