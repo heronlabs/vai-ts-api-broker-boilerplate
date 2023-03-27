@@ -10,18 +10,23 @@ import {
 
 import {JsonPresenterDto} from '../../presenters/json/dtos/json-presenter-dto';
 import {JsonPresenter} from '../../presenters/json/json-presenter';
-import {WebhookBody} from './req/webhook-body';
+import {WebhookRaw} from './raws/webhook-raw';
+import {WebhookReq} from './reqs/webhook-req';
 
 @Controller('/queue')
 export class QueueController {
   @Post()
   @HttpCode(HttpStatus.OK)
   public addRequest(
-    @Body() webhook: WebhookBody
-  ): JsonPresenterDto<WebhookBody> {
-    this.amqpConnection.publish<WebhookBody>('web-hook', 'api-broker', webhook);
+    @Body() webhookReq: WebhookReq
+  ): JsonPresenterDto<WebhookReq> {
+    this.amqpConnection.publish<WebhookReq>(
+      'web-hook',
+      'api-broker',
+      webhookReq
+    );
 
-    return this.jsonPresenter.envelope(webhook);
+    return this.jsonPresenter.envelope(webhookReq);
   }
 
   @RabbitSubscribe({
@@ -29,8 +34,8 @@ export class QueueController {
     routingKey: 'api-broker',
     queue: 'api-broker',
   })
-  listenRequest(data: WebhookBody): void {
-    console.log(data);
+  listenRequest(webhookRaw: WebhookRaw): void {
+    console.log(webhookRaw);
   }
 
   constructor(
