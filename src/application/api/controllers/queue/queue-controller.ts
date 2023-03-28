@@ -33,6 +33,7 @@ export class QueueController {
     exchange: 'web-hook',
     routingKey: 'api-broker',
     queue: 'api-broker',
+    errorHandler: () => {},
   })
   listenRequest(webhookRaw: WebhookRaw): void {
     console.log(webhookRaw);
