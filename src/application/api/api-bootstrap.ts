@@ -24,16 +24,22 @@ export const apiModule: ModuleMetadata = {
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigBootstrap],
       inject: [Configuration],
-      useFactory: (environmentConfiguration: EnvironmentConfiguration) => ({
-        exchanges: [
-          {
-            name: 'web-hook',
-            type: 'topic',
-          },
-        ],
-        uri: environmentConfiguration.rabbitMq.url,
-        enableControllerDiscovery: true,
-      }),
+      useFactory: async (
+        environmentConfiguration: EnvironmentConfiguration
+      ) => {
+        const {rabbitMq} = await environmentConfiguration.getConfig();
+
+        return {
+          exchanges: [
+            {
+              name: 'web-hook',
+              type: 'topic',
+            },
+          ],
+          uri: rabbitMq.url,
+          enableControllerDiscovery: true,
+        };
+      },
     }),
   ],
   controllers: [HealthCheckController, QueueController],
