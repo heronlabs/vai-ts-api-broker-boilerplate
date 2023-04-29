@@ -384,10 +384,10 @@
     amqp-connection-manager "^3.0.0"
     amqplib "^0.8.0"
 
-"@heronlabs/presenter-env@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@heronlabs/presenter-env/-/presenter-env-1.0.0.tgz#bce7551bcf31af96a3ffc00d7cd54d5b1e393bb7"
-  integrity sha512-zR8GsV9EcSc9kq6W7xZqpOZWg0y3ljXDTWZx+nHX4e6b6vWnICC2oIMpzNN+FE6McPiIopqNT8CeprnzX5suxg==
+"@heronlabs/presenter-env@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@heronlabs/presenter-env/-/presenter-env-2.1.0.tgz#6106e0be9b29fb80cd9bab7aa2f7f2ebd5241caa"
+  integrity sha512-ZXmdY2Qm5T4rOzwpqWXVNuQ4zcWntYKAlbs/irsplDUh8dXk+cqlvA9CrgnZIelllbUiXo0TRgoXTdN8aHVTZA==
   dependencies:
     "@nestjs/common" "^9.0.0"
     "@nestjs/core" "^9.4.0"
