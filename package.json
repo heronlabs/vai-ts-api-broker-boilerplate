@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^3.5.0",
-    "@heronlabs/presenter-env": "^3.0.0",
+    "@heronlabs/presenter-env": "^3.1.0",
     "@nestjs/common": "^9.1.4",
     "@nestjs/core": "^9.1.4",
     "@nestjs/platform-express": "^9.1.4",
